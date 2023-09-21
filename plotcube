@@ -1,0 +1,7 @@
+#!/usr/bin/bash
+module add vmd-1.9.3
+makevmdtcl 0.025  > plot
+#vmd -dispdev text -e plot
+vmd -dispdev text -size 1600 1200 -e plot
+rm plot
+#vmd -dispdev text -size 1600 1200 -eofexit script.tcl

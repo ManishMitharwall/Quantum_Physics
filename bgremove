@@ -1,0 +1,49 @@
+#!/storage/praha1/home/manishkumar/.conda/envs/kumarpython3/bin/python3.8
+
+## script by manish_kumar
+
+from PIL import Image
+
+import os
+
+directory = r'.'
+
+for filename in os.listdir(directory):
+    if filename.endswith(".tga"):
+        img = Image.open(filename)
+        name = filename.replace( '.tga' , '_new')
+        img = Image.open(filename)
+        img = img.convert("RGBA")
+        datas = img.getdata()
+
+        newData = []
+        for item in datas:
+            if item[0] == 255 and item[1] == 255 and item[2] == 255:
+               newData.append((255, 255, 255, 0))
+            else:
+               newData.append(item)
+        img.putdata(newData)
+
+        border = 0
+        bbox = img.getbbox()
+        img = img.crop(bbox)
+        (width, height) = img.size
+        width += border * 2
+        height += border * 2
+        cropped_image = Image.new("RGBA", (width, height), (0,0,0,0))
+        cropped_image.paste(img, (border, border))
+        cropped_image.paste(img, (border, border))
+
+
+
+
+
+        img.save( name +".png", "PNG")
+
+
+
+        continue
+    else:
+        continue
+
+print("All done, Good luck!")

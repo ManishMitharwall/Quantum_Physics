@@ -1,0 +1,64 @@
+#!/storage/praha1/home/manishkumar/.conda/envs/kumarpython3/bin/python3.8
+
+import os
+import sys
+
+directory = r'.'
+cube_file =[]
+
+for filename in os.listdir(directory):
+    if filename.endswith(".cube"):
+        cube_file.append(filename)
+
+
+scale = 1
+isoserface = sys.argv[1]
+
+class VMD:
+    def __init__(self):
+        global scale, isoserface
+    
+    def vmd_data(self):
+        
+        vmd_body = f"""axes location Off;
+color Element C silver;
+material change ambient Transparent 0.47;
+material change diffuse Transparent 1.0;
+material change specular Transparent  0.10;
+material change shineness Transparent 1.0;
+material change mirror Opaque 0;
+material change opacity Opaque 1.0;
+material change opacity Transparent 0.39;
+color Display Background white;
+display projection Orthographic;
+display depthcue off;
+mol color Element;
+mol selection all;
+mol material Glossy;
+mol representation CPK 0.8;
+mol addrep $molid;
+mol color ColorID 23;
+mol representation Isosurface {isoserface}  0 0 0 1 1;
+mol selection all;
+mol material Transparent;
+mol addrep $molid;
+mol color ColorID 31;
+mol representation Isosurface -{isoserface} 0 0 0 1 1;
+mol selection all;
+mol material Transparent;
+mol addrep $molid;"""
+        return vmd_body
+
+    def plot_orcamo(self,nmolid,mofile):
+        print(f"mol addfile {mofile};")
+        print(f'set molid {nmolid};')
+        print(self.vmd_data())
+        print(f'scale by {scale};')
+        print(f'render TachyonInternal {mofile}.tga;')
+        print(f'mol delete {nmolid};')           
+       
+
+vm = VMD()
+for j,k in enumerate(cube_file):
+    vm.plot_orcamo(j,k)
+print('exit')
